@@ -1,6 +1,9 @@
 package iputil
 
-import "net"
+import (
+	"net"
+	"strconv"
+)
 
 type IPv4 [4]byte
 
@@ -15,4 +18,12 @@ func ParseIPv4(s string) *IPv4 {
 	ip4 := new(IPv4)
 	copy(ip4[:], ip)
 	return ip4
+}
+
+// String returns the dotted decimal form of the IPv4 address.
+func (ip4 *IPv4) String() string {
+	return strconv.Itoa(int(ip4[0])) + "." +
+		strconv.Itoa(int(ip4[1])) + "." +
+		strconv.Itoa(int(ip4[2])) + "." +
+		strconv.Itoa(int(ip4[3]))
 }

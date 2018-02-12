@@ -18,7 +18,7 @@ func TestParseIPv4(t *testing.T) {
 		out := ParseIPv4(c.in)
 		if ((out == nil || c.out == nil) && out != c.out) ||
 			(out != nil && c.out != nil && !bytes.Equal(out[:], c.out[:])) {
-			t.Errorf("unexpected result: got %v, want %v", out, c.out)
+			t.Errorf("unexpected result: got %s, want %s", out, c.out)
 		}
 	}
 }
