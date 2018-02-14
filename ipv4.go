@@ -21,6 +21,13 @@ func ParseIPv4(s string) *IPv4 {
 	return ip4
 }
 
+// ParseUint32 parses the integer i as an IPv4 address.
+func ParseUint32(i uint32) *IPv4 {
+	ip4 := new(IPv4)
+	binary.BigEndian.PutUint32(ip4[:], i)
+	return ip4
+}
+
 // Uint32 converts the IPv4 address to integer.
 func (ip4 *IPv4) Uint32() uint32 {
 	return binary.BigEndian.Uint32(ip4[:])
