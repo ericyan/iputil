@@ -22,3 +22,20 @@ func TestParseIPv4(t *testing.T) {
 		}
 	}
 }
+
+func TestIPv4ToUint32(t *testing.T) {
+	cases := []struct {
+		in  *IPv4
+		out uint32
+	}{
+		{&IPv4{0, 0, 0, 0}, 0},
+		{&IPv4{192, 168, 0, 1}, 3232235521},
+		{&IPv4{255, 255, 255, 255}, 4294967295},
+	}
+
+	for _, c := range cases {
+		if out := c.in.Uint32(); out != c.out {
+			t.Errorf("unexpected result: got %d, want %d", out, c.out)
+		}
+	}
+}

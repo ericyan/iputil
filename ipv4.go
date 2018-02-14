@@ -1,6 +1,7 @@
 package iputil
 
 import (
+	"encoding/binary"
 	"net"
 	"strconv"
 )
@@ -18,6 +19,11 @@ func ParseIPv4(s string) *IPv4 {
 	ip4 := new(IPv4)
 	copy(ip4[:], ip)
 	return ip4
+}
+
+// Uint32 converts the IPv4 address to integer.
+func (ip4 *IPv4) Uint32() uint32 {
+	return binary.BigEndian.Uint32(ip4[:])
 }
 
 // String returns the dotted decimal form of the IPv4 address.
