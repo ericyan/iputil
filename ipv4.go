@@ -3,7 +3,6 @@ package iputil
 import (
 	"encoding/binary"
 	"net"
-	"strconv"
 )
 
 type IPv4 [4]byte
@@ -35,8 +34,5 @@ func (ip4 *IPv4) Uint32() uint32 {
 
 // String returns the dotted decimal form of the IPv4 address.
 func (ip4 *IPv4) String() string {
-	return strconv.Itoa(int(ip4[0])) + "." +
-		strconv.Itoa(int(ip4[1])) + "." +
-		strconv.Itoa(int(ip4[2])) + "." +
-		strconv.Itoa(int(ip4[3]))
+	return net.IP(ip4[:]).String()
 }
