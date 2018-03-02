@@ -1,6 +1,7 @@
 package iputil
 
 import (
+	"math/big"
 	"net"
 )
 
@@ -17,6 +18,19 @@ func ParseIPv6(s string) *IPv6 {
 	ip6 := new(IPv6)
 	copy(ip6[:], ip)
 	return ip6
+}
+
+// ParseBigInt parses the integer i as an IPv6 address.
+func ParseBigInt(i *big.Int) *IPv6 {
+	ip6 := new(IPv6)
+	copy(ip6[:], i.Bytes())
+	return ip6
+}
+
+// BigInt converts the IPv6 address to integer.
+func (ip6 *IPv6) BigInt() *big.Int {
+	i := big.NewInt(0)
+	return i.SetBytes(ip6[:])
 }
 
 // String returns the dotted decimal form of the IPv6 address.
