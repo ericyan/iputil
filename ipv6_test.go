@@ -2,7 +2,6 @@ package iputil
 
 import (
 	"bytes"
-	"math/big"
 	"testing"
 )
 
@@ -53,12 +52,7 @@ func TestBigIntToIPv6(t *testing.T) {
 	}
 
 	for _, c := range cases {
-		i, ok := big.NewInt(0).SetString(c.in, 10)
-		if !ok {
-			t.Errorf("failed to SetString: %s", c.in)
-		}
-
-		if out := ParseBigInt(i); out.String() != c.out {
+		if out := ParseDecimal(c.in); out.String() != c.out {
 			t.Errorf("unexpected result: got %s, want %s", out, c.out)
 		}
 	}

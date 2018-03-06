@@ -20,6 +20,17 @@ func ParseIPv6(s string) *IPv6 {
 	return ip6
 }
 
+// ParseDecimal parses the string s in base 10 and converts it to IPv6
+// address. If s is not valid, ParseDecimal returns nil.
+func ParseDecimal(s string) *IPv6 {
+	i, ok := new(big.Int).SetString(s, 10)
+	if !ok {
+		return nil
+	}
+
+	return ParseBigInt(i)
+}
+
 // ParseBigInt parses the integer i as an IPv6 address.
 func ParseBigInt(i *big.Int) *IPv6 {
 	ip6 := new(IPv6)
