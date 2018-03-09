@@ -3,6 +3,7 @@ package iputil
 import (
 	"encoding/binary"
 	"net"
+	"strconv"
 )
 
 type IPv4 [4]byte
@@ -18,6 +19,17 @@ func ParseIPv4(s string) *IPv4 {
 	ip4 := new(IPv4)
 	copy(ip4[:], ip)
 	return ip4
+}
+
+// ParseDecimal4 parses the string s in base 10 and converts it to IPv4
+// address. If s is not valid, ParseDecimal4 returns nil.
+func ParseDecimal4(s string) *IPv4 {
+	i, err := strconv.Atoi(s)
+	if err != nil {
+		return nil
+	}
+
+	return ParseUint32(uint32(i))
 }
 
 // ParseUint32 parses the integer i as an IPv4 address.

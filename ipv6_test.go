@@ -52,7 +52,7 @@ func TestBigIntToIPv6(t *testing.T) {
 	}
 
 	for _, c := range cases {
-		if out := ParseDecimal(c.in); out.String() != c.out {
+		if out := ParseDecimal6(c.in); out.String() != c.out {
 			t.Errorf("unexpected result: got %s, want %s", out, c.out)
 		}
 	}
