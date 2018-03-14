@@ -5,6 +5,23 @@ import (
 	"testing"
 )
 
+func TestAddressFamily(t *testing.T) {
+	cases := []struct {
+		ip net.IP
+		af uint
+	}{
+		{nil, 0},
+		{net.IP{192, 168, 0, 1}, 4},
+		{net.IP{0x20, 0x01, 0x0d, 0xb8, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x01}, 6},
+	}
+
+	for _, c := range cases {
+		if af := AddressFamily(c.ip); af != c.af {
+			t.Errorf("unexpected result: got %d, want %d", af, c.af)
+		}
+	}
+}
+
 func TestParseDecimal(t *testing.T) {
 	cases := []struct {
 		s  string

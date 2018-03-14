@@ -5,6 +5,19 @@ import (
 	"net"
 )
 
+// AddressFamily returns the address family of given IP address: 4 for
+// IPv4, 6 for IPv6, and 0 for everthing else.
+func AddressFamily(ip net.IP) uint {
+	switch len(ip) {
+	case net.IPv4len:
+		return 4
+	case net.IPv6len:
+		return 6
+	default:
+		return 0
+	}
+}
+
 // ParseDecimal parses the string s in base 10 and converts it to an IP
 // address of specified address family (4 for IPv4 and 6 for IPv6). If
 // either s or af is invalid, ParseDecimal returns nil.
