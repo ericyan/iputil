@@ -9,15 +9,26 @@ func TestAddressFamily(t *testing.T) {
 	cases := []struct {
 		ip net.IP
 		af uint
+		v4 bool
+		v6 bool
 	}{
-		{nil, 0},
-		{net.IP{192, 168, 0, 1}, 4},
-		{net.IP{0x20, 0x01, 0x0d, 0xb8, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x01}, 6},
+		{nil, 0, false, false},
+		{net.IP{192, 168, 0, 1}, 4, true, false},
+		{net.IP{0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0xff, 0xff, 192, 168, 0, 1}, 6, true, true},
+		{net.IP{0x20, 0x01, 0x0d, 0xb8, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x01}, 6, false, true},
 	}
 
 	for _, c := range cases {
 		if af := AddressFamily(c.ip); af != c.af {
-			t.Errorf("unexpected result: got %d, want %d", af, c.af)
+			t.Errorf("unexpected af: got %d, want %d", af, c.af)
+		}
+
+		if v4 := IsIPv4(c.ip); v4 != c.v4 {
+			t.Errorf("unexpected v4: got %t, want %t", v4, c.v4)
+		}
+
+		if v6 := IsIPv6(c.ip); v6 != c.v6 {
+			t.Errorf("unexpected v6: got %t, want %t", v6, c.v6)
 		}
 	}
 }

@@ -18,6 +18,17 @@ func AddressFamily(ip net.IP) uint {
 	}
 }
 
+// IsIPv4 returns true if ip is an 32-bit IPv4 address or an IPv4-mapped
+// IPv6 addresses as specified in section 2.5.5.2 of RFC 4291.
+func IsIPv4(ip net.IP) bool {
+	return AddressFamily(ip.To4()) == 4
+}
+
+// IsIPv6 returns true if ip is an 128-bit IPv6 address.
+func IsIPv6(ip net.IP) bool {
+	return AddressFamily(ip) == 6
+}
+
 // ParseDecimal parses the string s in base 10 and converts it to an IP
 // address of specified address family (4 for IPv4 and 6 for IPv6). If
 // either s or af is invalid, ParseDecimal returns nil.
