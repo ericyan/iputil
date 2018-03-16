@@ -53,3 +53,8 @@ func ParseDecimal(s string, af uint) net.IP {
 
 	return ip
 }
+
+// DecimalString returns the decimal notation of ip as a string.
+func DecimalString(ip net.IP) string {
+	return new(big.Int).SetBytes(ip).String()
+}
