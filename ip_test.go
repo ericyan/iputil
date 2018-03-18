@@ -61,6 +61,7 @@ func TestDecimalString(t *testing.T) {
 		ip net.IP
 		s  string
 	}{
+		{nil, "<nil>"},
 		{net.ParseIP("0.0.0.0").To4(), "0"},
 		{net.ParseIP("::"), "0"},
 		{net.ParseIP("192.168.0.1").To4(), "3232235521"},
