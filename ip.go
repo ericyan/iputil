@@ -1,7 +1,6 @@
 package iputil
 
 import (
-	"math/big"
 	"net"
 )
 
@@ -43,13 +42,14 @@ func ParseDecimal(s string, af uint) net.IP {
 		return nil
 	}
 
-	i, ok := new(big.Int).SetString(s, 10)
+	x, ok := new(uint128).setDecimalString(s)
 	if !ok {
 		return nil
 	}
 
 	ip := make(net.IP, byteLen)
-	copy(ip, i.Bytes())
+	b := x.bytes()
+	copy(ip, b[16-byteLen:])
 
 	return ip
 }
@@ -61,5 +61,8 @@ func DecimalString(ip net.IP) string {
 		return "<nil>"
 	}
 
-	return new(big.Int).SetBytes(ip).String()
+	var b [16]byte
+	copy(b[16-len(ip):], ip)
+
+	return new(uint128).setBytes(b).decimalString()
 }
