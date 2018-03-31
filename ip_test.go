@@ -62,12 +62,12 @@ func TestDecimalString(t *testing.T) {
 		s  string
 	}{
 		{nil, "<nil>"},
-		{net.ParseIP("0.0.0.0").To4(), "0"},
-		{net.ParseIP("::"), "0"},
-		{net.ParseIP("192.168.0.1").To4(), "3232235521"},
-		{net.ParseIP("255.255.255.255").To4(), "4294967295"},
-		{net.ParseIP("2001:db8::1"), "42540766411282592856903984951653826561"},
-		{net.ParseIP("ffff:ffff:ffff:ffff:ffff:ffff:ffff:ffff"), "340282366920938463463374607431768211455"},
+		{ParseIPv4("0.0.0.0"), "0"},
+		{ParseIPv6("::"), "0"},
+		{ParseIPv4("192.168.0.1"), "3232235521"},
+		{ParseIPv4("255.255.255.255"), "4294967295"},
+		{ParseIPv6("2001:db8::1"), "42540766411282592856903984951653826561"},
+		{ParseIPv6("ffff:ffff:ffff:ffff:ffff:ffff:ffff:ffff"), "340282366920938463463374607431768211455"},
 	}
 
 	for _, c := range cases {
