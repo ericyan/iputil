@@ -2,6 +2,8 @@ package iputil
 
 import (
 	"net"
+
+	"github.com/ericyan/iputil/internal/uint128"
 )
 
 // AddressFamily returns the address family of given IP address: 4 for
@@ -53,13 +55,13 @@ func ParseDecimal(s string, af uint) net.IP {
 		return nil
 	}
 
-	x, ok := new(uint128).setDecimalString(s)
+	x, ok := new(uint128.Uint128).SetDecimalString(s)
 	if !ok {
 		return nil
 	}
 
 	ip := make(net.IP, byteLen)
-	b := x.bytes()
+	b := x.Bytes()
 	copy(ip, b[16-byteLen:])
 
 	return ip
@@ -75,5 +77,5 @@ func DecimalString(ip net.IP) string {
 	var b [16]byte
 	copy(b[16-len(ip):], ip)
 
-	return new(uint128).setBytes(b).decimalString()
+	return new(uint128.Uint128).SetBytes(b).DecimalString()
 }
