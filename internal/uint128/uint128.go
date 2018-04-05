@@ -6,21 +6,23 @@ import (
 )
 
 // Uint128 is a big-endian unsigned 128-bit integer.
-type Uint128 [2]uint64
+type Uint128 struct {
+	Hi, Lo uint64
+}
 
 // SetBytes interprets buf as the bytes of a big-endian uint128, sets x
 // to that value, and returns x.
 func (x Uint128) SetBytes(b [16]byte) Uint128 {
-	x[0] = binary.BigEndian.Uint64(b[:8])
-	x[1] = binary.BigEndian.Uint64(b[8:])
+	x.Hi = binary.BigEndian.Uint64(b[:8])
+	x.Lo = binary.BigEndian.Uint64(b[8:])
 	return x
 }
 
 // Bytes returns x as a big-endian byte slice.
 func (x Uint128) Bytes() [16]byte {
 	var buf [16]byte
-	binary.BigEndian.PutUint64(buf[:8], x[0])
-	binary.BigEndian.PutUint64(buf[8:], x[1])
+	binary.BigEndian.PutUint64(buf[:8], x.Hi)
+	binary.BigEndian.PutUint64(buf[8:], x.Lo)
 	return buf
 }
 
