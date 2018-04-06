@@ -55,8 +55,8 @@ func ParseDecimal(s string, af uint) net.IP {
 		return nil
 	}
 
-	x, ok := new(uint128.Uint128).SetDecimalString(s)
-	if !ok {
+	x, err := uint128.NewFromString(s)
+	if err != nil {
 		return nil
 	}
 
@@ -77,5 +77,5 @@ func DecimalString(ip net.IP) string {
 	var b [16]byte
 	copy(b[16-len(ip):], ip)
 
-	return new(uint128.Uint128).SetBytes(b).DecimalString()
+	return uint128.NewFromBytes(b).DecimalString()
 }
