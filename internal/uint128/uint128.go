@@ -48,8 +48,8 @@ func NewFromString(s string) (Uint128, error) {
 }
 
 // Bytes returns x as a big-endian byte slice.
-func (x Uint128) Bytes() [16]byte {
-	var buf [16]byte
+func (x Uint128) Bytes() []byte {
+	buf := make([]byte, 16)
 	binary.BigEndian.PutUint64(buf[:8], x.Hi)
 	binary.BigEndian.PutUint64(buf[8:], x.Lo)
 	return buf
@@ -57,6 +57,5 @@ func (x Uint128) Bytes() [16]byte {
 
 // DecimalString converts x to a string of decimal digits.
 func (x Uint128) DecimalString() string {
-	b := x.Bytes()
-	return new(big.Int).SetBytes(b[:]).String()
+	return new(big.Int).SetBytes(x.Bytes()).String()
 }

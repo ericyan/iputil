@@ -9,7 +9,7 @@ func TestBytes(t *testing.T) {
 	buf := []byte{0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15}
 	x, _ := NewFromBytes(buf)
 
-	if xbuf := x.Bytes(); !bytes.Equal(xbuf[:], buf[:]) {
+	if xbuf := x.Bytes(); !bytes.Equal(xbuf, buf) {
 		t.Errorf("unexpected byte slice: got %v, want %v", xbuf, buf)
 	}
 }
