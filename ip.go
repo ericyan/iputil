@@ -70,12 +70,10 @@ func ParseDecimal(s string, af uint) net.IP {
 // DecimalString returns the decimal notation of ip as a string. If ip
 // has length 0, it returns "<nil>".
 func DecimalString(ip net.IP) string {
-	if len(ip) == 0 {
+	x, err := uint128.NewFromBytes(ip)
+	if err != nil {
 		return "<nil>"
 	}
 
-	var b [16]byte
-	copy(b[16-len(ip):], ip)
-
-	return uint128.NewFromBytes(b).DecimalString()
+	return x.DecimalString()
 }
