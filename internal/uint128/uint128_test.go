@@ -33,7 +33,7 @@ func TestDecimal(t *testing.T) {
 		if (err == nil) != c.ok {
 			t.Errorf("unexpected result: got %t, want %t", (err == nil), c.ok)
 		}
-		if out := x.DecimalString(); out != c.out {
+		if out := x.String(); out != c.out {
 			t.Errorf("unexpected result: got %s, want %s", out, c.out)
 		}
 	}

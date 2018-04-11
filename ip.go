@@ -75,5 +75,5 @@ func DecimalString(ip net.IP) string {
 		return "<nil>"
 	}
 
-	return x.DecimalString()
+	return x.String()
 }

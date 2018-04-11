@@ -55,7 +55,7 @@ func (x Uint128) Bytes() []byte {
 	return buf
 }
 
-// DecimalString converts x to a string of decimal digits.
-func (x Uint128) DecimalString() string {
+// String converts x to a string of decimal digits.
+func (x Uint128) String() string {
 	return new(big.Int).SetBytes(x.Bytes()).String()
 }
