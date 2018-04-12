@@ -6,7 +6,13 @@ import (
 	"math/big"
 )
 
-var Zero = Uint128{0x0, 0x0}
+var (
+	Zero = Uint128{0x0, 0x0}
+
+	ErrOverflow      = errors.New("overflow")
+	ErrEmptySlice    = errors.New("empty byte slice")
+	ErrInvalidString = errors.New("invalid string")
+)
 
 // Uint128 is a big-endian unsigned 128-bit integer.
 type Uint128 struct {
@@ -16,11 +22,11 @@ type Uint128 struct {
 // NewFromBytes creates a new Uint128 from buf, a big-endian byte slice.
 func NewFromBytes(buf []byte) (Uint128, error) {
 	if len(buf) == 0 {
-		return Zero, errors.New("empty byte slice")
+		return Zero, ErrEmptySlice
 	}
 
 	if len(buf) > 16 {
-		return Zero, errors.New("overflow")
+		return Zero, ErrOverflow
 	}
 
 	var b [16]byte
@@ -36,7 +42,7 @@ func NewFromBytes(buf []byte) (Uint128, error) {
 func NewFromString(s string) (Uint128, error) {
 	i, ok := new(big.Int).SetString(s, 10)
 	if !ok {
-		return Zero, errors.New("invalid string")
+		return Zero, ErrInvalidString
 	}
 
 	// The zero value for an big.Int represents the value 0.
