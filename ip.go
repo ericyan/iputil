@@ -6,14 +6,19 @@ import (
 	"github.com/ericyan/iputil/internal/uint128"
 )
 
+const (
+	IPv4 = 4
+	IPv6 = 6
+)
+
 // AddressFamily returns the address family of given IP address: 4 for
 // IPv4, 6 for IPv6, and 0 for everthing else.
 func AddressFamily(ip net.IP) uint {
 	switch len(ip) {
 	case net.IPv4len:
-		return 4
+		return IPv4
 	case net.IPv6len:
-		return 6
+		return IPv6
 	default:
 		return 0
 	}
@@ -22,12 +27,12 @@ func AddressFamily(ip net.IP) uint {
 // IsIPv4 returns true if ip is an 32-bit IPv4 address or an IPv4-mapped
 // IPv6 addresses as specified in section 2.5.5.2 of RFC 4291.
 func IsIPv4(ip net.IP) bool {
-	return AddressFamily(ip.To4()) == 4
+	return AddressFamily(ip.To4()) == IPv4
 }
 
 // IsIPv6 returns true if ip is an 128-bit IPv6 address.
 func IsIPv6(ip net.IP) bool {
-	return AddressFamily(ip) == 6
+	return AddressFamily(ip) == IPv6
 }
 
 // ParseIPv4 parses s as an IPv4 address.
