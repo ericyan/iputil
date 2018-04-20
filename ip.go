@@ -7,12 +7,12 @@ import (
 )
 
 const (
-	IPv4 = 4
-	IPv6 = 6
+	IPv4 = 1
+	IPv6 = 2
 )
 
-// AddressFamily returns the address family of given IP address: 4 for
-// IPv4, 6 for IPv6, and 0 for everthing else.
+// AddressFamily returns the address family of given IP address: 1 for
+// IPv4, 2 for IPv6, and 0 for everthing else.
 func AddressFamily(ip net.IP) uint {
 	switch len(ip) {
 	case net.IPv4len:
