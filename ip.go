@@ -35,6 +35,12 @@ func IsIPv6(ip net.IP) bool {
 	return AddressFamily(ip) == IPv6
 }
 
+// IsIPv4Mapped returns true if ip is an IPv4-mapped IPv6 addresses as
+// specified in section 2.5.5.2 of RFC 4291.
+func IsIPv4Mapped(ip net.IP) bool {
+	return IsIPv4(ip) && IsIPv6(ip)
+}
+
 // ParseIPv4 parses s as an IPv4 address.
 func ParseIPv4(s string) net.IP {
 	return net.ParseIP(s).To4()
