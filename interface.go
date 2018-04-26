@@ -11,6 +11,11 @@ type InterfaceAddr struct {
 	InterfaceName string
 }
 
+// Interface returns the associated network interface.
+func (addr *InterfaceAddr) Interface() (*net.Interface, error) {
+	return net.InterfaceByName(addr.InterfaceName)
+}
+
 // InterfaceAddrs returns a list of the system's unicast interface IP
 // addresses.
 func InterfaceAddrs() ([]*InterfaceAddr, error) {

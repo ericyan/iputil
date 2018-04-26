@@ -27,4 +27,13 @@ func TestInterfaceAddrs(t *testing.T) {
 	if ifAddrs[0].InterfaceName != lo.Name {
 		t.Errorf("unexpected interface: want %s, get %s", ifAddrs[0].InterfaceName, lo.Name)
 	}
+
+	iface, err := ifAddrs[0].Interface()
+	if err != nil {
+		t.Error(err)
+	}
+
+	if iface.Index != lo.Index {
+		t.Errorf("unexpected interface: want %s (#%d), get %s (#%d)", iface.Name, iface.Index, lo.Name, lo.Index)
+	}
 }
