@@ -1,6 +1,7 @@
 package iputil
 
 import (
+	"errors"
 	"net"
 )
 
@@ -38,4 +39,36 @@ func InterfaceAddrs() ([]*InterfaceAddr, error) {
 	}
 
 	return ifAddrs, nil
+}
+
+// DefaultIPv4 returns the first non-loopback interface IPv4 address.
+func DefaultIPv4() (*InterfaceAddr, error) {
+	ifAddrs, err := InterfaceAddrs()
+	if err != nil {
+		return nil, err
+	}
+
+	for _, addr := range ifAddrs {
+		if IsIPv4(addr.IP) && !addr.IP.IsLoopback() {
+			return addr, nil
+		}
+	}
+
+	return nil, errors.New("default ipv4 unavailable")
+}
+
+// DefaultIPv6 returns the first non-loopback interface IPv6 address.
+func DefaultIPv6() (*InterfaceAddr, error) {
+	ifAddrs, err := InterfaceAddrs()
+	if err != nil {
+		return nil, err
+	}
+
+	for _, addr := range ifAddrs {
+		if IsIPv6(addr.IP) && !IsIPv4(addr.IP) && !addr.IP.IsLoopback() {
+			return addr, nil
+		}
+	}
+
+	return nil, errors.New("default ipv6 unavailable")
 }
