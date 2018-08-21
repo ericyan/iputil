@@ -11,6 +11,12 @@ const (
 	IPv6 = 2
 )
 
+// IP address lengths in bits.
+const (
+	IPv4BitLen = 32
+	IPv6BitLen = 128
+)
+
 // AddressFamily returns the address family of given IP address: 1 for
 // IPv4, 2 for IPv6, and 0 for everthing else.
 func AddressFamily(ip net.IP) uint {
@@ -39,6 +45,19 @@ func IsIPv6(ip net.IP) bool {
 // specified in section 2.5.5.2 of RFC 4291.
 func IsIPv4Mapped(ip net.IP) bool {
 	return IsIPv4(ip) && IsIPv6(ip)
+}
+
+// BitLen returns the length of ip in bits.
+func BitLen(ip net.IP) int {
+	if IsIPv4(ip) {
+		return IPv4BitLen
+	}
+
+	if IsIPv6(ip) {
+		return IPv6BitLen
+	}
+
+	return 0
 }
 
 // ParseIPv4 parses s as an IPv4 address.
