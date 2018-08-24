@@ -27,3 +27,25 @@ func TestSubnetAddr(t *testing.T) {
 		}
 	}
 }
+
+func TestSubnetting(t *testing.T) {
+	cases := []struct {
+		supernet string
+		prefix   int
+		subnets  []string
+	}{
+		{"192.168.0.1/24", 26, []string{"192.168.0.0/26", "192.168.0.64/26", "192.168.0.128/26", "192.168.0.192/26"}},
+		{"2001:db8::1/48", 50, []string{"2001:db8::/50", "2001:db8:0:4000::/50", "2001:db8:0:8000::/50", "2001:db8:0:c000::/50"}},
+	}
+
+	for _, c := range cases {
+		_, supernet, _ := net.ParseCIDR(c.supernet)
+		subnets := Subnets(supernet, c.prefix)
+
+		for i, subnet := range subnets {
+			if subnet.String() != c.subnets[i] {
+				t.Errorf("unexpected subnet: got %s, want %s", subnet, c.subnets[i])
+			}
+		}
+	}
+}
