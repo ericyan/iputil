@@ -25,3 +25,13 @@ func (r *Range) Contains(ip net.IP) bool {
 
 	return true
 }
+
+// Network returns the network name, "ip+net".
+func (r *Range) Network() string {
+	return "ip+net"
+}
+
+// String returns the string form of range.
+func (r *Range) String() string {
+	return r.First.String() + " - " + r.Last.String()
+}
