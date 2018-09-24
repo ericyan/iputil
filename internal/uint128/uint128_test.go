@@ -5,6 +5,30 @@ import (
 	"testing"
 )
 
+func TestComparison(t *testing.T) {
+	cases := []struct {
+		x   Uint128
+		y   Uint128
+		cmp int
+		gt  bool
+		eq  bool
+		lt  bool
+	}{
+		{Uint128{0, 0}, Uint128{0, 0}, 0, false, true, false},
+		{Uint128{0, 2}, Uint128{0, 1}, 1, true, false, false},
+		{Uint128{1, 0}, Uint128{0, 1}, 1, true, false, false},
+		{Uint128{0, 1}, Uint128{0, 65535}, -1, false, false, true},
+		{Uint128{0, 65535}, Uint128{1, 0}, -1, false, false, true},
+	}
+
+	for _, c := range cases {
+		if c.x.cmp(c.y) != c.cmp || c.x.GreaterThan(c.y) != c.gt || c.x.EqualTo(c.y) != c.eq || c.x.LessThan(c.y) != c.lt {
+			t.Errorf("unexpected comparison result")
+		}
+	}
+
+}
+
 func TestBytes(t *testing.T) {
 	cases := []struct {
 		in  []byte

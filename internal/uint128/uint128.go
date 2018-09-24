@@ -53,6 +53,46 @@ func NewFromString(s string) (Uint128, error) {
 	return NewFromBytes(i.Bytes())
 }
 
+// cmp compares x and y and returns either -1, 0, or +1 depending on
+// whether x is less than, equal to, or greater than y.
+func (x Uint128) cmp(y Uint128) int {
+	if x.Hi > y.Hi {
+		return 1
+	}
+	if x.Hi < y.Hi {
+		return -1
+	}
+
+	// Now that x.Hi == y.Hi
+	if x.Lo > y.Lo {
+		return 1
+	}
+	if x.Lo < y.Lo {
+		return -1
+	}
+
+	return 0
+}
+
+// GreaterThan returns true if x is greater than y.
+func (x Uint128) GreaterThan(y Uint128) bool {
+	return x.cmp(y) == 1
+}
+
+// LessThan returns true if x is less than y.
+func (x Uint128) LessThan(y Uint128) bool {
+	return x.cmp(y) == -1
+}
+
+// EqualTo returns true if x is equal to y.
+func (x Uint128) EqualTo(y Uint128) bool {
+	if x.Hi == y.Hi && x.Lo == y.Lo {
+		return true
+	}
+
+	return false
+}
+
 // Bytes returns x as a big-endian byte slice.
 func (x Uint128) Bytes() []byte {
 	buf := make([]byte, 16)
