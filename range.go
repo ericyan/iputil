@@ -1,8 +1,9 @@
 package iputil
 
 import (
-	"math/big"
 	"net"
+
+	"github.com/ericyan/iputil/internal/uint128"
 )
 
 // A Range represents an arbitrary IP address range.
@@ -13,13 +14,13 @@ type Range struct {
 
 // Contains reports whether the range includes ip.
 func (r *Range) Contains(ip net.IP) bool {
-	x := new(big.Int).SetBytes(ip)
+	x, _ := uint128.NewFromBytes(ip)
 
-	if first := new(big.Int).SetBytes(r.First); first.Cmp(x) > 0 {
+	if first, _ := uint128.NewFromBytes(r.First); x.LessThan(first) {
 		return false
 	}
 
-	if last := new(big.Int).SetBytes(r.Last); last.Cmp(x) < 0 {
+	if last, _ := uint128.NewFromBytes(r.Last); x.GreaterThan(last) {
 		return false
 	}
 
