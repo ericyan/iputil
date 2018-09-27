@@ -16,11 +16,11 @@ type Range struct {
 func (r *Range) Contains(ip net.IP) bool {
 	x, _ := uint128.NewFromBytes(ip)
 
-	if first, _ := uint128.NewFromBytes(r.First); x.LessThan(first) {
+	if first, _ := uint128.NewFromBytes(r.First); x.IsLessThan(first) {
 		return false
 	}
 
-	if last, _ := uint128.NewFromBytes(r.Last); x.GreaterThan(last) {
+	if last, _ := uint128.NewFromBytes(r.Last); x.IsGreaterThan(last) {
 		return false
 	}
 

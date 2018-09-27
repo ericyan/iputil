@@ -53,9 +53,9 @@ func NewFromString(s string) (Uint128, error) {
 	return NewFromBytes(i.Bytes())
 }
 
-// cmp compares x and y and returns either -1, 0, or +1 depending on
+// Cmp compares x and y and returns either -1, 0, or +1 depending on
 // whether x is less than, equal to, or greater than y.
-func (x Uint128) cmp(y Uint128) int {
+func (x Uint128) Cmp(y Uint128) int {
 	if x.Hi > y.Hi {
 		return 1
 	}
@@ -74,18 +74,18 @@ func (x Uint128) cmp(y Uint128) int {
 	return 0
 }
 
-// GreaterThan returns true if x is greater than y.
-func (x Uint128) GreaterThan(y Uint128) bool {
-	return x.cmp(y) == 1
+// IsGreaterThan returns true if x is greater than y.
+func (x Uint128) IsGreaterThan(y Uint128) bool {
+	return x.Cmp(y) == 1
 }
 
-// LessThan returns true if x is less than y.
-func (x Uint128) LessThan(y Uint128) bool {
-	return x.cmp(y) == -1
+// IsLessThan returns true if x is less than y.
+func (x Uint128) IsLessThan(y Uint128) bool {
+	return x.Cmp(y) == -1
 }
 
-// EqualTo returns true if x is equal to y.
-func (x Uint128) EqualTo(y Uint128) bool {
+// IsEqualTo returns true if x is equal to y.
+func (x Uint128) IsEqualTo(y Uint128) bool {
 	if x.Hi == y.Hi && x.Lo == y.Lo {
 		return true
 	}

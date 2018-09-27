@@ -22,7 +22,7 @@ func TestComparison(t *testing.T) {
 	}
 
 	for _, c := range cases {
-		if c.x.cmp(c.y) != c.cmp || c.x.GreaterThan(c.y) != c.gt || c.x.EqualTo(c.y) != c.eq || c.x.LessThan(c.y) != c.lt {
+		if c.x.Cmp(c.y) != c.cmp || c.x.IsGreaterThan(c.y) != c.gt || c.x.IsEqualTo(c.y) != c.eq || c.x.IsLessThan(c.y) != c.lt {
 			t.Errorf("unexpected comparison result")
 		}
 	}
