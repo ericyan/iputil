@@ -5,6 +5,8 @@ import (
 	"testing"
 )
 
+const maxUint64 = (1<<64 - 1)
+
 func TestComparison(t *testing.T) {
 	cases := []struct {
 		x   Uint128
@@ -27,6 +29,44 @@ func TestComparison(t *testing.T) {
 		}
 	}
 
+}
+
+func TestAdd(t *testing.T) {
+	cases := []struct {
+		x Uint128
+		y uint64
+		z Uint128
+	}{
+		{Uint128{0, 0}, 1, Uint128{0, 1}},
+		{Uint128{0, maxUint64}, 1, Uint128{1, 0}},
+		{Uint128{maxUint64, 0}, 0, Uint128{maxUint64, 0}},
+		{Uint128{maxUint64, maxUint64}, 1, Uint128{0, 0}},
+	}
+
+	for _, c := range cases {
+		if !c.x.Add(c.y).IsEqualTo(c.z) {
+			t.Errorf("%s + %d != %s", c.x, c.y, c.z)
+		}
+	}
+}
+
+func TestSub(t *testing.T) {
+	cases := []struct {
+		x Uint128
+		y uint64
+		z Uint128
+	}{
+		{Uint128{0, 0}, 1, Uint128{maxUint64, maxUint64}},
+		{Uint128{0, 1}, 1, Uint128{0, 0}},
+		{Uint128{1, 0}, 1, Uint128{0, maxUint64}},
+		{Uint128{maxUint64, 0}, 0, Uint128{maxUint64, 0}},
+	}
+
+	for _, c := range cases {
+		if !c.x.Sub(c.y).IsEqualTo(c.z) {
+			t.Errorf("%s - %d != %s", c.x, c.y, c.z)
+		}
+	}
 }
 
 func TestBytes(t *testing.T) {

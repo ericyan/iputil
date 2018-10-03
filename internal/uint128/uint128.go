@@ -53,6 +53,28 @@ func NewFromString(s string) (Uint128, error) {
 	return NewFromBytes(i.Bytes())
 }
 
+// Add returns the sum x+y as a new Uint128.
+func (x Uint128) Add(y uint64) Uint128 {
+	lo := x.Lo + y
+	hi := x.Hi
+	if x.Lo > lo {
+		hi++
+	}
+
+	return Uint128{hi, lo}
+}
+
+// Sub returns the difference x-y as a new Uint128.
+func (x Uint128) Sub(y uint64) Uint128 {
+	lo := x.Lo - y
+	hi := x.Hi
+	if x.Lo < lo {
+		hi--
+	}
+
+	return Uint128{hi, lo}
+}
+
 // Cmp compares x and y and returns either -1, 0, or +1 depending on
 // whether x is less than, equal to, or greater than y.
 func (x Uint128) Cmp(y Uint128) int {
