@@ -12,26 +12,37 @@ func TestComparison(t *testing.T) {
 		x   Uint128
 		y   Uint128
 		cmp int
-		gt  bool
-		eq  bool
-		lt  bool
 	}{
-		{Uint128{0, 0}, Uint128{0, 0}, 0, false, true, false},
-		{Uint128{0, 2}, Uint128{0, 1}, 1, true, false, false},
-		{Uint128{1, 0}, Uint128{0, 1}, 1, true, false, false},
-		{Uint128{0, 1}, Uint128{0, 65535}, -1, false, false, true},
-		{Uint128{0, 65535}, Uint128{1, 0}, -1, false, false, true},
+		{Uint128{0, 0}, Uint128{0, 0}, 0},
+		{Uint128{0, 2}, Uint128{0, 1}, 1},
+		{Uint128{1, 0}, Uint128{0, 1}, 1},
+		{Uint128{0, 1}, Uint128{0, maxUint64}, -1},
+		{Uint128{0, maxUint64}, Uint128{1, 0}, -1},
 	}
 
 	for _, c := range cases {
-		if c.x.Cmp(c.y) != c.cmp || c.x.IsGreaterThan(c.y) != c.gt || c.x.IsEqualTo(c.y) != c.eq || c.x.IsLessThan(c.y) != c.lt {
-			t.Errorf("unexpected comparison result")
+		if c.x.Cmp(c.y) != c.cmp {
+			t.Errorf("unexpected cmp(%s, %s): want %d, got %d", c.x, c.y, c.cmp, c.x.Cmp(c.y))
+		}
+
+		switch c.cmp {
+		case -1:
+			if c.x.IsGreaterThan(c.y) || c.x.IsEqualTo(c.y) || !c.x.IsLessThan(c.y) {
+				t.Errorf("helper method is not consistent when cmp == -1")
+			}
+		case 0:
+			if c.x.IsGreaterThan(c.y) || !c.x.IsEqualTo(c.y) || c.x.IsLessThan(c.y) {
+				t.Errorf("helper method is not consistent when cmp == 0")
+			}
+		case 1:
+			if !c.x.IsGreaterThan(c.y) || c.x.IsEqualTo(c.y) || c.x.IsLessThan(c.y) {
+				t.Errorf("helper method is not consistent when cmp == 1")
+			}
 		}
 	}
-
 }
 
-func TestAdd(t *testing.T) {
+func TestAddSub(t *testing.T) {
 	cases := []struct {
 		x Uint128
 		y uint64
@@ -45,26 +56,11 @@ func TestAdd(t *testing.T) {
 
 	for _, c := range cases {
 		if !c.x.Add(c.y).IsEqualTo(c.z) {
-			t.Errorf("%s + %d != %s", c.x, c.y, c.z)
+			t.Errorf("%s + %d != %s, got %s", c.x, c.y, c.z, c.x.Add(c.y))
 		}
-	}
-}
 
-func TestSub(t *testing.T) {
-	cases := []struct {
-		x Uint128
-		y uint64
-		z Uint128
-	}{
-		{Uint128{0, 0}, 1, Uint128{maxUint64, maxUint64}},
-		{Uint128{0, 1}, 1, Uint128{0, 0}},
-		{Uint128{1, 0}, 1, Uint128{0, maxUint64}},
-		{Uint128{maxUint64, 0}, 0, Uint128{maxUint64, 0}},
-	}
-
-	for _, c := range cases {
-		if !c.x.Sub(c.y).IsEqualTo(c.z) {
-			t.Errorf("%s - %d != %s", c.x, c.y, c.z)
+		if !c.z.Sub(c.y).IsEqualTo(c.x) {
+			t.Errorf("%s - %d != %s, got %s", c.z, c.y, c.x, c.z.Sub(c.y))
 		}
 	}
 }
