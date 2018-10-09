@@ -53,6 +53,19 @@ func NewFromString(s string) (Uint128, error) {
 	return NewFromBytes(i.Bytes())
 }
 
+// Pow2 returns 2**n, the base-2 exponential of n.
+func Pow2(n uint) (Uint128, error) {
+	if n > 127 {
+		return Zero, ErrOverflow
+	}
+
+	if n < 64 {
+		return Uint128{0, 1 << n}, nil
+	}
+
+	return Uint128{1 << (n - 64), 0}, nil
+}
+
 // Add returns the sum x+y as a new Uint128.
 func (x Uint128) Add(y uint64) Uint128 {
 	lo := x.Lo + y

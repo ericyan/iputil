@@ -114,3 +114,29 @@ func TestString(t *testing.T) {
 		}
 	}
 }
+
+func TestPow2(t *testing.T) {
+	cases := []struct {
+		n   uint
+		out string
+		err error
+	}{
+		{0, "1", nil},
+		{1, "2", nil},
+		{2, "4", nil},
+		{63, "9223372036854775808", nil},
+		{64, "18446744073709551616", nil},
+		{127, "170141183460469231731687303715884105728", nil},
+		{128, "0", ErrOverflow},
+	}
+
+	for _, c := range cases {
+		x, err := Pow2(c.n)
+		if err != c.err {
+			t.Errorf("unexpected error for %d: got %s, want %s", c.n, err, c.err)
+		}
+		if out := x.String(); out != c.out {
+			t.Errorf("unexpected result: got %s, want %s", out, c.out)
+		}
+	}
+}
