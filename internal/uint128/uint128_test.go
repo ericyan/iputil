@@ -44,23 +44,30 @@ func TestComparison(t *testing.T) {
 
 func TestAddSub(t *testing.T) {
 	cases := []struct {
-		x Uint128
-		y uint64
-		z Uint128
+		x string
+		y string
+		z string // z = x + y
 	}{
-		{Uint128{0, 0}, 1, Uint128{0, 1}},
-		{Uint128{0, maxUint64}, 1, Uint128{1, 0}},
-		{Uint128{maxUint64, 0}, 0, Uint128{maxUint64, 0}},
-		{Uint128{maxUint64, maxUint64}, 1, Uint128{0, 0}},
+		{"0", "1", "1"},
+		{"1", "0", "1"},
+		{"1", "18446744073709551615", "18446744073709551616"},
+		{"18446744073709551615", "1", "18446744073709551616"},
+		{"36893488147419103231", "36893488147419103232", "73786976294838206463"},
+		{"1", "340282366920938463463374607431768211455", "0"},
+		{"340282366920938463463374607431768211455", "1", "0"},
 	}
 
 	for _, c := range cases {
-		if !c.x.Add(c.y).IsEqualTo(c.z) {
-			t.Errorf("%s + %d != %s, got %s", c.x, c.y, c.z, c.x.Add(c.y))
+		x, _ := NewFromString(c.x)
+		y, _ := NewFromString(c.y)
+		z, _ := NewFromString(c.z)
+
+		if !x.Add(y).IsEqualTo(z) {
+			t.Errorf("%s + %d != %s, got %s", x, y, z, x.Add(y))
 		}
 
-		if !c.z.Sub(c.y).IsEqualTo(c.x) {
-			t.Errorf("%s - %d != %s, got %s", c.z, c.y, c.x, c.z.Sub(c.y))
+		if !z.Sub(y).IsEqualTo(x) {
+			t.Errorf("%s - %d != %s, got %s", z, y, x, z.Sub(y))
 		}
 	}
 }

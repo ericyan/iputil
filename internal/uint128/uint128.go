@@ -67,9 +67,9 @@ func Pow2(n uint) (Uint128, error) {
 }
 
 // Add returns the sum x+y as a new Uint128.
-func (x Uint128) Add(y uint64) Uint128 {
-	lo := x.Lo + y
-	hi := x.Hi
+func (x Uint128) Add(y Uint128) Uint128 {
+	lo := x.Lo + y.Lo
+	hi := x.Hi + y.Hi
 	if x.Lo > lo {
 		hi++
 	}
@@ -78,9 +78,9 @@ func (x Uint128) Add(y uint64) Uint128 {
 }
 
 // Sub returns the difference x-y as a new Uint128.
-func (x Uint128) Sub(y uint64) Uint128 {
-	lo := x.Lo - y
-	hi := x.Hi
+func (x Uint128) Sub(y Uint128) Uint128 {
+	lo := x.Lo - y.Lo
+	hi := x.Hi - y.Hi
 	if x.Lo < lo {
 		hi--
 	}
