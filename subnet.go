@@ -1,8 +1,9 @@
 package iputil
 
 import (
-	"math/big"
 	"net"
+
+	"github.com/ericyan/iputil/internal/uint128"
 )
 
 // NetworkAddr returns the network address, which is also the beginning
@@ -35,14 +36,23 @@ func Subnets(supernet *net.IPNet, prefix int) []*net.IPNet {
 		return nil
 	}
 
+	ip := supernet.IP
 	mask := net.CIDRMask(prefix, bits)
-	ip := new(big.Int).SetBytes(supernet.IP)
-	size := new(big.Int).Exp(big.NewInt(2), big.NewInt(int64(bits-prefix)), big.NewInt(0))
+	size, _ := uint128.Pow2(uint(bits - prefix))
 
-	subnets := make([]*net.IPNet, 2<<uint(prefix-ones-1))
+	subnets := make([]*net.IPNet, 1<<uint(prefix-ones))
 	for i := 0; i < len(subnets); i++ {
+		if i > 0 {
+			last, _ := uint128.NewFromBytes(subnets[i-1].IP)
+			buf := last.Add(size).Bytes()
+
+			// Uint128 always returns a 16-byte slice. We only need the last
+			// 4 bytes for IPv4 addresses.
+			ip = buf[16-len(ip):]
+		}
+
 		subnets[i] = &net.IPNet{
-			IP:   new(big.Int).Add(ip, new(big.Int).Mul(size, big.NewInt(int64(i)))).Bytes(),
+			IP:   ip,
 			Mask: mask,
 		}
 	}
