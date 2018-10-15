@@ -6,6 +6,7 @@ import (
 	"github.com/ericyan/iputil/internal/uint128"
 )
 
+// IANA-assigned address family numbers for IPv4 and IPv6.
 const (
 	IPv4 = 1
 	IPv6 = 2
@@ -72,14 +73,14 @@ func ParseIPv6(s string) net.IP {
 }
 
 // ParseDecimal parses the string s in base 10 and converts it to an IP
-// address of specified address family (4 for IPv4 and 6 for IPv6). If
+// address of specified address family (1 for IPv4 and 2 for IPv6). If
 // either s or af is invalid, ParseDecimal returns nil.
 func ParseDecimal(s string, af uint) net.IP {
 	var byteLen uint
 	switch af {
-	case 4:
+	case IPv4:
 		byteLen = net.IPv4len
-	case 6:
+	case IPv6:
 		byteLen = net.IPv6len
 	default:
 		return nil
