@@ -88,6 +88,21 @@ func (x Uint128) Sub(y Uint128) Uint128 {
 	return Uint128{hi, lo}
 }
 
+// And returns a new Uint128 that is the bitwise AND of two Uint128 values.
+func (x Uint128) And(y Uint128) Uint128 {
+	return Uint128{x.Hi & y.Hi, x.Lo & y.Lo}
+}
+
+// Or returns a new Uint128 that is the bitwise OR of two Uint128 values.
+func (x Uint128) Or(y Uint128) Uint128 {
+	return Uint128{x.Hi | y.Hi, x.Lo | y.Lo}
+}
+
+// Xor returns a new Uint128 that is the bitwise XOR of two Uint128 values.
+func (x Uint128) Xor(y Uint128) Uint128 {
+	return Uint128{x.Hi ^ y.Hi, x.Lo ^ y.Lo}
+}
+
 // Cmp compares x and y and returns either -1, 0, or +1 depending on
 // whether x is less than, equal to, or greater than y.
 func (x Uint128) Cmp(y Uint128) int {
