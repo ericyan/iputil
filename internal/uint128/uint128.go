@@ -143,6 +143,16 @@ func (x Uint128) IsEqualTo(y Uint128) bool {
 	return false
 }
 
+// IsEven returns true if x is an even number.
+func (x Uint128) IsEven() bool {
+	return x.And(Uint128{0, 1}) == Zero
+}
+
+// IsOdd returns true if x is an odd number.
+func (x Uint128) IsOdd() bool {
+	return x.And(Uint128{0, 1}) != Zero
+}
+
 // Bytes returns x as a big-endian byte slice.
 func (x Uint128) Bytes() []byte {
 	buf := make([]byte, 16)

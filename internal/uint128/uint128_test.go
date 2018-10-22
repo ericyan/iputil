@@ -167,3 +167,24 @@ func TestBitwise(t *testing.T) {
 		t.Errorf("unexpected XOR result: %s ^ %s != %s", u1, u2, expectedXor)
 	}
 }
+
+func TestEvenOdd(t *testing.T) {
+	cases := []struct {
+		x    Uint128
+		even bool
+		odd  bool
+	}{
+		{Uint128{0, 0}, true, false},
+		{Uint128{0, 1}, false, true},
+		{Uint128{0, 2}, true, false},
+		{Uint128{1, 0}, true, false},
+		{Uint128{1, 1}, false, true},
+		{Uint128{1, 2}, true, false},
+	}
+
+	for _, c := range cases {
+		if c.x.IsEven() != c.even || c.x.IsOdd() != c.odd {
+			t.Errorf("unexpected oddness for %s", c.x)
+		}
+	}
+}
