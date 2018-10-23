@@ -103,6 +103,32 @@ func (x Uint128) Xor(y Uint128) Uint128 {
 	return Uint128{x.Hi ^ y.Hi, x.Lo ^ y.Lo}
 }
 
+// Lsh moves each bit of x to the left by n bits and returns result as a new Uint128.
+func (x Uint128) Lsh(n uint) Uint128 {
+	if n >= 128 {
+		return Zero
+	}
+
+	if n >= 64 {
+		return Uint128{x.Lo << (n - 64), 0}
+	}
+
+	return Uint128{(x.Hi << n) | (x.Lo >> (64 - n)), x.Lo << n}
+}
+
+// Rsh moves each bit of x to the right by n bits and returns result as a new Uint128.
+func (x Uint128) Rsh(n uint) Uint128 {
+	if n >= 128 {
+		return Zero
+	}
+
+	if n >= 64 {
+		return Uint128{0, x.Hi >> (n - 64)}
+	}
+
+	return Uint128{x.Hi >> n, (x.Lo >> n) | (x.Hi << (64 - n))}
+}
+
 // Cmp compares x and y and returns either -1, 0, or +1 depending on
 // whether x is less than, equal to, or greater than y.
 func (x Uint128) Cmp(y Uint128) int {

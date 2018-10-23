@@ -166,6 +166,30 @@ func TestBitwise(t *testing.T) {
 	if !(u1.Xor(u2)).IsEqualTo(expectedXor) {
 		t.Errorf("unexpected XOR result: %s ^ %s != %s", u1, u2, expectedXor)
 	}
+
+	expectedLsh1 := Uint128{11152697053990709979, 3857524254624110006}
+	if !(u1.Lsh(1)).IsEqualTo(expectedLsh1) {
+		t.Errorf("unexpected left shift result: %s >> %d != %s", u1, 1, expectedLsh1)
+	}
+
+	expectedLsh64 := Uint128{11152134164166830811, 0}
+	if !(u1.Lsh(64)).IsEqualTo(expectedLsh64) {
+		t.Errorf("unexpected left shift result: %s << %d != %s", u1, 64, expectedLsh64)
+	}
+
+	expectedRsh1 := Uint128{7399860281925065398, 14799439118938191213}
+	if !(u1.Rsh(1)).IsEqualTo(expectedRsh1) {
+		t.Errorf("unexpected right shift result: %s >> %d != %s", u1, 1, expectedRsh1)
+	}
+
+	expectedRsh64 := Uint128{0, 14799720563850130797}
+	if !(u1.Rsh(64)).IsEqualTo(expectedRsh64) {
+		t.Errorf("unexpected right shift result: %s >> %d != %s", u1, 64, expectedRsh64)
+	}
+
+	if !(u1.Lsh(0)).IsEqualTo(u1) || !(u1.Rsh(0)).IsEqualTo(u1) {
+		t.Errorf("left/right shift by 0 should be equal to itself")
+	}
 }
 
 func TestEvenOdd(t *testing.T) {
