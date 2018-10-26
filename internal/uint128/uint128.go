@@ -4,6 +4,7 @@ import (
 	"encoding/binary"
 	"errors"
 	"math/big"
+	"math/bits"
 )
 
 var (
@@ -123,6 +124,29 @@ func (x Uint128) Rsh(n uint) Uint128 {
 	}
 
 	return Uint128{x.Hi >> n, (x.Lo >> n) | (x.Hi << (64 - n))}
+}
+
+// Len returns the minimum number of bits required to represent x.
+func (x Uint128) BitLen() int {
+	if x.Hi == 0 {
+		return bits.Len64(x.Lo)
+	}
+
+	return 64 + bits.Len64(x.Hi)
+}
+
+// LeadingZeros returns the number of leading zero bits in x.
+func (x Uint128) LeadingZeros() int {
+	return 128 - x.BitLen()
+}
+
+// TrailingZeros returns the number of trailing zero bits in x.
+func (x Uint128) TrailingZeros() int {
+	if x.Lo == 0 {
+		return 64 + bits.TrailingZeros64(x.Hi)
+	}
+
+	return bits.TrailingZeros64(x.Lo)
 }
 
 // Cmp compares x and y and returns either -1, 0, or +1 depending on

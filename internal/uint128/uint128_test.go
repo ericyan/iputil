@@ -212,3 +212,32 @@ func TestEvenOdd(t *testing.T) {
 		}
 	}
 }
+
+func TestBitCounting(t *testing.T) {
+	cases := []struct {
+		n             Uint128
+		bitLen        int
+		leadingZeros  int
+		trailingZeros int
+	}{
+		{Zero, 0, 128, 128},
+		{Uint128{0, 1984}, 11, 117, 6},
+		{Uint128{1, 1984}, 65, 63, 6},
+		{Uint128{1984, 0}, 75, 53, 70},
+		{Uint128{1984, 1}, 75, 53, 0},
+	}
+
+	for _, c := range cases {
+		if bitLen := c.n.BitLen(); bitLen != c.bitLen {
+			t.Errorf("unexpected bit len for %s: got %d, want %d", c.n, bitLen, c.bitLen)
+		}
+
+		if leadingZeros := c.n.LeadingZeros(); leadingZeros != c.leadingZeros {
+			t.Errorf("unexpected leading zeros for %s: got %d, want %d", c.n, leadingZeros, c.leadingZeros)
+		}
+
+		if trailingZeros := c.n.TrailingZeros(); trailingZeros != c.trailingZeros {
+			t.Errorf("unexpected trailing zeros for %s: got %d, want %d", c.n, trailingZeros, c.trailingZeros)
+		}
+	}
+}
