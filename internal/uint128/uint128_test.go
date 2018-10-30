@@ -167,6 +167,11 @@ func TestBitwise(t *testing.T) {
 		t.Errorf("unexpected XOR result: %s ^ %s != %s", u1, u2, expectedXor)
 	}
 
+	expectedNot := Uint128{maxUint64, maxUint64}
+	if !(Zero.Not()).IsEqualTo(expectedNot) {
+		t.Errorf("unexpected Not result: ^%s != %s", Zero, expectedNot)
+	}
+
 	expectedLsh1 := Uint128{11152697053990709979, 3857524254624110006}
 	if !(u1.Lsh(1)).IsEqualTo(expectedLsh1) {
 		t.Errorf("unexpected left shift result: %s >> %d != %s", u1, 1, expectedLsh1)

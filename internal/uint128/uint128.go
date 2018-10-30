@@ -100,6 +100,11 @@ func (x Uint128) Xor(y Uint128) Uint128 {
 	return Uint128{x.Hi ^ y.Hi, x.Lo ^ y.Lo}
 }
 
+// Not returns a new Uint128 that is the bitwise NOT of x.
+func (x Uint128) Not() Uint128 {
+	return Uint128{^x.Hi, ^x.Lo}
+}
+
 // Lsh moves each bit of x to the left by n bits and returns result as a new Uint128.
 func (x Uint128) Lsh(n uint) Uint128 {
 	if n >= 128 {
