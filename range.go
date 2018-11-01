@@ -79,7 +79,7 @@ func (r *Range) CIDR() []*net.IPNet {
 		zeros := cur.TrailingZeros()
 
 		// Number of remaining IPs.
-		n := r.last.Sub(cur).Add(uint128.Uint128{0, 1})
+		n := r.last.Sub(cur).Add(uint128.One)
 
 		// log2n is the max k that 2**k < n. This ensures cidrLen < n.
 		if log2n := 128 - n.LeadingZeros() - 1; zeros > log2n {

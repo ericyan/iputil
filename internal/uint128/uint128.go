@@ -9,6 +9,7 @@ import (
 
 var (
 	Zero = Uint128{0x0, 0x0}
+	One  = Uint128{0x0, 0x1}
 
 	ErrOverflow      = errors.New("overflow")
 	ErrEmptySlice    = errors.New("empty byte slice")
