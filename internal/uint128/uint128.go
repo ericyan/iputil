@@ -8,21 +8,21 @@ import (
 )
 
 var (
-	Zero = Uint128{0x0, 0x0}
-	One  = Uint128{0x0, 0x1}
+	Zero = Int{0x0, 0x0}
+	One  = Int{0x0, 0x1}
 
 	ErrOverflow      = errors.New("overflow")
 	ErrEmptySlice    = errors.New("empty byte slice")
 	ErrInvalidString = errors.New("invalid string")
 )
 
-// Uint128 is a big-endian unsigned 128-bit integer.
-type Uint128 struct {
+// An Int represents a big-endian unsigned 128-bit integer.
+type Int struct {
 	Hi, Lo uint64
 }
 
-// NewFromBytes creates a new Uint128 from buf, a big-endian byte slice.
-func NewFromBytes(buf []byte) (Uint128, error) {
+// NewFromBytes creates a new Int from buf, a big-endian byte slice.
+func NewFromBytes(buf []byte) (Int, error) {
 	if len(buf) == 0 {
 		return Zero, ErrEmptySlice
 	}
@@ -34,14 +34,14 @@ func NewFromBytes(buf []byte) (Uint128, error) {
 	var b [16]byte
 	copy(b[16-len(buf):], buf)
 
-	return Uint128{
+	return Int{
 		Hi: binary.BigEndian.Uint64(b[:8]),
 		Lo: binary.BigEndian.Uint64(b[8:]),
 	}, nil
 }
 
-// NewFromString creates a new Uint128 from s, interpreted in base 10.
-func NewFromString(s string) (Uint128, error) {
+// NewFromString creates a new Int from s, interpreted in base 10.
+func NewFromString(s string) (Int, error) {
 	i, ok := new(big.Int).SetString(s, 10)
 	if !ok {
 		return Zero, ErrInvalidString
@@ -56,84 +56,84 @@ func NewFromString(s string) (Uint128, error) {
 }
 
 // Pow2 returns 2**n, the base-2 exponential of n.
-func Pow2(n uint) (Uint128, error) {
+func Pow2(n uint) (Int, error) {
 	if n >= 128 {
 		return Zero, ErrOverflow
 	}
 
-	return Uint128{0, 1}.Lsh(n), nil
+	return Int{0, 1}.Lsh(n), nil
 }
 
-// Add returns the sum x+y as a new Uint128.
-func (x Uint128) Add(y Uint128) Uint128 {
+// Add returns the sum x+y as a new Int.
+func (x Int) Add(y Int) Int {
 	lo := x.Lo + y.Lo
 	hi := x.Hi + y.Hi
 	if x.Lo > lo {
 		hi++
 	}
 
-	return Uint128{hi, lo}
+	return Int{hi, lo}
 }
 
-// Sub returns the difference x-y as a new Uint128.
-func (x Uint128) Sub(y Uint128) Uint128 {
+// Sub returns the difference x-y as a new Int.
+func (x Int) Sub(y Int) Int {
 	lo := x.Lo - y.Lo
 	hi := x.Hi - y.Hi
 	if x.Lo < lo {
 		hi--
 	}
 
-	return Uint128{hi, lo}
+	return Int{hi, lo}
 }
 
-// And returns a new Uint128 that is the bitwise AND of two Uint128 values.
-func (x Uint128) And(y Uint128) Uint128 {
-	return Uint128{x.Hi & y.Hi, x.Lo & y.Lo}
+// And returns a new Int that is the bitwise AND of two Int values.
+func (x Int) And(y Int) Int {
+	return Int{x.Hi & y.Hi, x.Lo & y.Lo}
 }
 
-// Or returns a new Uint128 that is the bitwise OR of two Uint128 values.
-func (x Uint128) Or(y Uint128) Uint128 {
-	return Uint128{x.Hi | y.Hi, x.Lo | y.Lo}
+// Or returns a new Int that is the bitwise OR of two Int values.
+func (x Int) Or(y Int) Int {
+	return Int{x.Hi | y.Hi, x.Lo | y.Lo}
 }
 
-// Xor returns a new Uint128 that is the bitwise XOR of two Uint128 values.
-func (x Uint128) Xor(y Uint128) Uint128 {
-	return Uint128{x.Hi ^ y.Hi, x.Lo ^ y.Lo}
+// Xor returns a new Int that is the bitwise XOR of two Int values.
+func (x Int) Xor(y Int) Int {
+	return Int{x.Hi ^ y.Hi, x.Lo ^ y.Lo}
 }
 
-// Not returns a new Uint128 that is the bitwise NOT of x.
-func (x Uint128) Not() Uint128 {
-	return Uint128{^x.Hi, ^x.Lo}
+// Not returns a new Int that is the bitwise NOT of x.
+func (x Int) Not() Int {
+	return Int{^x.Hi, ^x.Lo}
 }
 
-// Lsh moves each bit of x to the left by n bits and returns result as a new Uint128.
-func (x Uint128) Lsh(n uint) Uint128 {
+// Lsh moves each bit of x to the left by n bits and returns result as a new Int.
+func (x Int) Lsh(n uint) Int {
 	if n >= 128 {
 		return Zero
 	}
 
 	if n >= 64 {
-		return Uint128{x.Lo << (n - 64), 0}
+		return Int{x.Lo << (n - 64), 0}
 	}
 
-	return Uint128{(x.Hi << n) | (x.Lo >> (64 - n)), x.Lo << n}
+	return Int{(x.Hi << n) | (x.Lo >> (64 - n)), x.Lo << n}
 }
 
-// Rsh moves each bit of x to the right by n bits and returns result as a new Uint128.
-func (x Uint128) Rsh(n uint) Uint128 {
+// Rsh moves each bit of x to the right by n bits and returns result as a new Int.
+func (x Int) Rsh(n uint) Int {
 	if n >= 128 {
 		return Zero
 	}
 
 	if n >= 64 {
-		return Uint128{0, x.Hi >> (n - 64)}
+		return Int{0, x.Hi >> (n - 64)}
 	}
 
-	return Uint128{x.Hi >> n, (x.Lo >> n) | (x.Hi << (64 - n))}
+	return Int{x.Hi >> n, (x.Lo >> n) | (x.Hi << (64 - n))}
 }
 
 // Len returns the minimum number of bits required to represent x.
-func (x Uint128) BitLen() int {
+func (x Int) BitLen() int {
 	if x.Hi == 0 {
 		return bits.Len64(x.Lo)
 	}
@@ -142,12 +142,12 @@ func (x Uint128) BitLen() int {
 }
 
 // LeadingZeros returns the number of leading zero bits in x.
-func (x Uint128) LeadingZeros() int {
+func (x Int) LeadingZeros() int {
 	return 128 - x.BitLen()
 }
 
 // TrailingZeros returns the number of trailing zero bits in x.
-func (x Uint128) TrailingZeros() int {
+func (x Int) TrailingZeros() int {
 	if x.Lo == 0 {
 		return 64 + bits.TrailingZeros64(x.Hi)
 	}
@@ -157,7 +157,7 @@ func (x Uint128) TrailingZeros() int {
 
 // Cmp compares x and y and returns either -1, 0, or +1 depending on
 // whether x is less than, equal to, or greater than y.
-func (x Uint128) Cmp(y Uint128) int {
+func (x Int) Cmp(y Int) int {
 	if x.Hi > y.Hi {
 		return 1
 	}
@@ -177,17 +177,17 @@ func (x Uint128) Cmp(y Uint128) int {
 }
 
 // IsGreaterThan returns true if x is greater than y.
-func (x Uint128) IsGreaterThan(y Uint128) bool {
+func (x Int) IsGreaterThan(y Int) bool {
 	return x.Cmp(y) == 1
 }
 
 // IsLessThan returns true if x is less than y.
-func (x Uint128) IsLessThan(y Uint128) bool {
+func (x Int) IsLessThan(y Int) bool {
 	return x.Cmp(y) == -1
 }
 
 // IsEqualTo returns true if x is equal to y.
-func (x Uint128) IsEqualTo(y Uint128) bool {
+func (x Int) IsEqualTo(y Int) bool {
 	if x.Hi == y.Hi && x.Lo == y.Lo {
 		return true
 	}
@@ -196,17 +196,17 @@ func (x Uint128) IsEqualTo(y Uint128) bool {
 }
 
 // IsEven returns true if x is an even number.
-func (x Uint128) IsEven() bool {
-	return x.And(Uint128{0, 1}) == Zero
+func (x Int) IsEven() bool {
+	return x.And(Int{0, 1}) == Zero
 }
 
 // IsOdd returns true if x is an odd number.
-func (x Uint128) IsOdd() bool {
-	return x.And(Uint128{0, 1}) != Zero
+func (x Int) IsOdd() bool {
+	return x.And(Int{0, 1}) != Zero
 }
 
 // Bytes returns x as a big-endian byte slice.
-func (x Uint128) Bytes() []byte {
+func (x Int) Bytes() []byte {
 	buf := make([]byte, 16)
 	binary.BigEndian.PutUint64(buf[:8], x.Hi)
 	binary.BigEndian.PutUint64(buf[8:], x.Lo)
@@ -214,6 +214,6 @@ func (x Uint128) Bytes() []byte {
 }
 
 // String converts x to a string of decimal digits.
-func (x Uint128) String() string {
+func (x Int) String() string {
 	return new(big.Int).SetBytes(x.Bytes()).String()
 }

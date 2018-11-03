@@ -10,8 +10,8 @@ import (
 // A Range represents an arbitrary IP address range.
 type Range struct {
 	af    uint
-	first uint128.Uint128
-	last  uint128.Uint128
+	first uint128.Int
+	last  uint128.Int
 }
 
 // NewRange returns a new Range.

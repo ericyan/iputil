@@ -9,15 +9,15 @@ const maxUint64 = (1<<64 - 1)
 
 func TestComparison(t *testing.T) {
 	cases := []struct {
-		x   Uint128
-		y   Uint128
+		x   Int
+		y   Int
 		cmp int
 	}{
-		{Uint128{0, 0}, Uint128{0, 0}, 0},
-		{Uint128{0, 2}, Uint128{0, 1}, 1},
-		{Uint128{1, 0}, Uint128{0, 1}, 1},
-		{Uint128{0, 1}, Uint128{0, maxUint64}, -1},
-		{Uint128{0, maxUint64}, Uint128{1, 0}, -1},
+		{Int{0, 0}, Int{0, 0}, 0},
+		{Int{0, 2}, Int{0, 1}, 1},
+		{Int{1, 0}, Int{0, 1}, 1},
+		{Int{0, 1}, Int{0, maxUint64}, -1},
+		{Int{0, maxUint64}, Int{1, 0}, -1},
 	}
 
 	for _, c := range cases {
@@ -149,45 +149,45 @@ func TestPow2(t *testing.T) {
 }
 
 func TestBitwise(t *testing.T) {
-	u1 := Uint128{14799720563850130797, 11152134164166830811}
-	u2 := Uint128{10868624793753271583, 6542293553298186666}
+	u1 := Int{14799720563850130797, 11152134164166830811}
+	u2 := Int{10868624793753271583, 6542293553298186666}
 
-	expectedAnd := Uint128{9529907221165552909, 1927615693132931210}
+	expectedAnd := Int{9529907221165552909, 1927615693132931210}
 	if !(u1.And(u2)).IsEqualTo(expectedAnd) {
 		t.Errorf("unexpected AND result: %s & %s != %s", u1, u2, expectedAnd)
 	}
 
-	expectedOr := Uint128{16138438136437849471, 15766812024332086267}
+	expectedOr := Int{16138438136437849471, 15766812024332086267}
 	if !(u1.Or(u2)).IsEqualTo(expectedOr) {
 		t.Errorf("unexpected OR result: %s | %s != %s", u1, u2, expectedOr)
 	}
 
-	expectedXor := Uint128{6608530915272296562, 13839196331199155057}
+	expectedXor := Int{6608530915272296562, 13839196331199155057}
 	if !(u1.Xor(u2)).IsEqualTo(expectedXor) {
 		t.Errorf("unexpected XOR result: %s ^ %s != %s", u1, u2, expectedXor)
 	}
 
-	expectedNot := Uint128{maxUint64, maxUint64}
+	expectedNot := Int{maxUint64, maxUint64}
 	if !(Zero.Not()).IsEqualTo(expectedNot) {
 		t.Errorf("unexpected Not result: ^%s != %s", Zero, expectedNot)
 	}
 
-	expectedLsh1 := Uint128{11152697053990709979, 3857524254624110006}
+	expectedLsh1 := Int{11152697053990709979, 3857524254624110006}
 	if !(u1.Lsh(1)).IsEqualTo(expectedLsh1) {
 		t.Errorf("unexpected left shift result: %s >> %d != %s", u1, 1, expectedLsh1)
 	}
 
-	expectedLsh64 := Uint128{11152134164166830811, 0}
+	expectedLsh64 := Int{11152134164166830811, 0}
 	if !(u1.Lsh(64)).IsEqualTo(expectedLsh64) {
 		t.Errorf("unexpected left shift result: %s << %d != %s", u1, 64, expectedLsh64)
 	}
 
-	expectedRsh1 := Uint128{7399860281925065398, 14799439118938191213}
+	expectedRsh1 := Int{7399860281925065398, 14799439118938191213}
 	if !(u1.Rsh(1)).IsEqualTo(expectedRsh1) {
 		t.Errorf("unexpected right shift result: %s >> %d != %s", u1, 1, expectedRsh1)
 	}
 
-	expectedRsh64 := Uint128{0, 14799720563850130797}
+	expectedRsh64 := Int{0, 14799720563850130797}
 	if !(u1.Rsh(64)).IsEqualTo(expectedRsh64) {
 		t.Errorf("unexpected right shift result: %s >> %d != %s", u1, 64, expectedRsh64)
 	}
@@ -199,16 +199,16 @@ func TestBitwise(t *testing.T) {
 
 func TestEvenOdd(t *testing.T) {
 	cases := []struct {
-		x    Uint128
+		x    Int
 		even bool
 		odd  bool
 	}{
-		{Uint128{0, 0}, true, false},
-		{Uint128{0, 1}, false, true},
-		{Uint128{0, 2}, true, false},
-		{Uint128{1, 0}, true, false},
-		{Uint128{1, 1}, false, true},
-		{Uint128{1, 2}, true, false},
+		{Int{0, 0}, true, false},
+		{Int{0, 1}, false, true},
+		{Int{0, 2}, true, false},
+		{Int{1, 0}, true, false},
+		{Int{1, 1}, false, true},
+		{Int{1, 2}, true, false},
 	}
 
 	for _, c := range cases {
@@ -220,16 +220,16 @@ func TestEvenOdd(t *testing.T) {
 
 func TestBitCounting(t *testing.T) {
 	cases := []struct {
-		n             Uint128
+		n             Int
 		bitLen        int
 		leadingZeros  int
 		trailingZeros int
 	}{
 		{Zero, 0, 128, 128},
-		{Uint128{0, 1984}, 11, 117, 6},
-		{Uint128{1, 1984}, 65, 63, 6},
-		{Uint128{1984, 0}, 75, 53, 70},
-		{Uint128{1984, 1}, 75, 53, 0},
+		{Int{0, 1984}, 11, 117, 6},
+		{Int{1, 1984}, 65, 63, 6},
+		{Int{1984, 0}, 75, 53, 70},
+		{Int{1984, 1}, 75, 53, 0},
 	}
 
 	for _, c := range cases {
