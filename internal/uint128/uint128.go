@@ -3,7 +3,6 @@ package uint128
 import (
 	"encoding/binary"
 	"errors"
-	"math/big"
 	"math/bits"
 )
 
@@ -42,17 +41,7 @@ func NewFromBytes(buf []byte) (Int, error) {
 
 // NewFromString creates a new Int from s, interpreted in base 10.
 func NewFromString(s string) (Int, error) {
-	i, ok := new(big.Int).SetString(s, 10)
-	if !ok {
-		return Zero, ErrInvalidString
-	}
-
-	// The zero value for an big.Int represents the value 0.
-	if len(i.Bytes()) == 0 {
-		return Zero, nil
-	}
-
-	return NewFromBytes(i.Bytes())
+	return Atoi(s)
 }
 
 // Pow2 returns 2**n, the base-2 exponential of n.
@@ -215,5 +204,5 @@ func (x Int) Bytes() []byte {
 
 // String converts x to a string of decimal digits.
 func (x Int) String() string {
-	return new(big.Int).SetBytes(x.Bytes()).String()
+	return Itoa(x)
 }
