@@ -75,6 +75,31 @@ func (x Int) Sub(y Int) Int {
 	return Int{hi, lo}
 }
 
+// mul64 returns the product x*y as two uint64.
+//
+// Overflow is handled by breaking the multiplication into (x1<<32 + x0)*(y1<<32 + y0).
+// Adapted from http://www.hackersdelight.org/hdcodetxt/muldwu.c.txt
+func mul64(x, y uint64) (hi, lo uint64) {
+	x0, x1 := x&0xffffffff, x>>32
+	y0, y1 := y&0xffffffff, y>>32
+
+	w0 := x0 * y0
+	t := x1*y0 + w0>>32
+	w1 := t & 0xffffffff
+	w2 := t >> 32
+	w1 += x0 * y1
+
+	return x1*y1 + w2 + w1>>32, x * y
+}
+
+// Mul returns the product x*y as a new Int.
+func (x Int) Mul(y Int) Int {
+	hi, lo := mul64(x.Lo, y.Lo)
+	hi += x.Hi*y.Lo + x.Lo*y.Hi
+
+	return Int{hi, lo}
+}
+
 // And returns a new Int that is the bitwise AND of two Int values.
 func (x Int) And(y Int) Int {
 	return Int{x.Hi & y.Hi, x.Lo & y.Lo}

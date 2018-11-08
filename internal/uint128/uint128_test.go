@@ -72,6 +72,30 @@ func TestAddSub(t *testing.T) {
 	}
 }
 
+func TestMul(t *testing.T) {
+	cases := []struct {
+		x string
+		y string
+		z string // z = x * y
+	}{
+		{"0", "1", "0"},
+		{"1", "18446744073709551616", "18446744073709551616"},
+		{"18446744073709551616", "18446744073709551616", "0"},
+		{"4294967296", "4294967295", "18446744069414584320"},
+		{"9223372036854775808", "9223372036854775809", "85070591730234615875067023894796828672"},
+	}
+
+	for _, c := range cases {
+		x, _ := NewFromString(c.x)
+		y, _ := NewFromString(c.y)
+		z, _ := NewFromString(c.z)
+
+		if !x.Mul(y).IsEqualTo(z) {
+			t.Errorf("%s * %d != %s, got %s", x, y, z, x.Mul(y))
+		}
+	}
+}
+
 func TestBytes(t *testing.T) {
 	cases := []struct {
 		in  []byte
