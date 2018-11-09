@@ -96,6 +96,31 @@ func TestMul(t *testing.T) {
 	}
 }
 
+func TestDivMod(t *testing.T) {
+	cases := []struct {
+		x string
+		y string
+		q string
+		m string
+	}{
+		{"12", "3", "4", "0"},
+		{"15", "4", "3", "3"},
+		{"36893488147419103232", "36893488147419103231", "1", "1"},
+		{"36893488147419103232", "3", "12297829382473034410", "2"},
+	}
+
+	for _, c := range cases {
+		x, _ := NewFromString(c.x)
+		y, _ := NewFromString(c.y)
+		q, _ := NewFromString(c.q)
+		m, _ := NewFromString(c.m)
+
+		if quo, mod := div(x, y); !quo.IsEqualTo(q) || !mod.IsEqualTo(m) {
+			t.Errorf("%s / %s != %s ... %s, got %s ... %s", x, y, q, m, quo, mod)
+		}
+	}
+}
+
 func TestBytes(t *testing.T) {
 	cases := []struct {
 		in  []byte

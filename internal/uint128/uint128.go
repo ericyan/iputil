@@ -100,6 +100,57 @@ func (x Int) Mul(y Int) Int {
 	return Int{hi, lo}
 }
 
+// getBit returns the n-th bit of x, where 0 is the least-significant bit.
+// The returned value will be either Zero or One.
+func getBit(x Int, n uint) Int {
+	return x.Rsh(n).And(One)
+}
+
+// setBit set the n-th bit of x to bit and returns the result as a net Int.
+func setBit(x Int, n uint, bit Int) Int {
+	mask := One.Lsh(n)
+
+	if bit == One {
+		return x.Or(mask)
+	}
+
+	return x.And(mask.Not())
+}
+
+// div returns the quotient and modulus for y != 0.
+func div(x, y Int) (quo, mod Int) {
+	if y.IsEqualTo(Zero) {
+		panic("division by zero")
+	}
+
+	quo, mod = Zero, Zero
+	for i := x.BitLen() - 1; i >= 0; i-- {
+		// Left-shift mode by 1 bit, then set the least-significant bit of mod
+		// equal to bit i of x
+		mod = mod.Lsh(1)
+		mod = setBit(mod, 0, getBit(x, uint(i)))
+
+		if mod.IsGreaterThan(y) || mod.IsEqualTo(y) {
+			mod = mod.Sub(y)
+			quo = setBit(quo, uint(i), One)
+		}
+	}
+
+	return quo, mod
+}
+
+// Div returns the quotient x/y for y != 0. If y == 0, a division-by-zero run-time panic occurs.
+func (x Int) Div(y Int) Int {
+	quo, _ := div(x, y)
+	return quo
+}
+
+// Mod returns the modulus x%y for y != 0. If y == 0, a division-by-zero run-time panic occurs.
+func (x Int) Mod(y Int) Int {
+	_, mod := div(x, y)
+	return mod
+}
+
 // And returns a new Int that is the bitwise AND of two Int values.
 func (x Int) And(y Int) Int {
 	return Int{x.Hi & y.Hi, x.Lo & y.Lo}
