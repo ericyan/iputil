@@ -9,6 +9,7 @@ import (
 var (
 	Zero = Int{0x0, 0x0}
 	One  = Int{0x0, 0x1}
+	Max  = Int{0xffffffffffffffff, 0xffffffffffffffff}
 
 	ErrOverflow      = errors.New("overflow")
 	ErrEmptySlice    = errors.New("empty byte slice")

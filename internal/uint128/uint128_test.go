@@ -146,31 +146,6 @@ func TestBytes(t *testing.T) {
 	}
 }
 
-func TestString(t *testing.T) {
-	cases := []struct {
-		in  string
-		out string
-		err error
-	}{
-		{"", "0", ErrInvalidString},
-		{"0", "0", nil},
-		{"0123456", "123456", nil},
-		{"4294967295", "4294967295", nil},
-		{"340282366920938463463374607431768211455", "340282366920938463463374607431768211455", nil},
-		{"340282366920938463463374607431768211456", "0", ErrOverflow},
-	}
-
-	for _, c := range cases {
-		x, err := NewFromString(c.in)
-		if err != c.err {
-			t.Errorf("unexpected error for %v: got %s, want %s", c.in, err, c.err)
-		}
-		if out := x.String(); out != c.out {
-			t.Errorf("unexpected result: got %s, want %s", out, c.out)
-		}
-	}
-}
-
 func TestPow2(t *testing.T) {
 	cases := []struct {
 		n   uint
