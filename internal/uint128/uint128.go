@@ -40,11 +40,6 @@ func NewFromBytes(buf []byte) (Int, error) {
 	}, nil
 }
 
-// NewFromString creates a new Int from s, interpreted in base 10.
-func NewFromString(s string) (Int, error) {
-	return Atoi(s)
-}
-
 // Pow2 returns 2**n, the base-2 exponential of n.
 func Pow2(n uint) (Int, error) {
 	if n >= 128 {

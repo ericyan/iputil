@@ -58,9 +58,9 @@ func TestAddSub(t *testing.T) {
 	}
 
 	for _, c := range cases {
-		x, _ := NewFromString(c.x)
-		y, _ := NewFromString(c.y)
-		z, _ := NewFromString(c.z)
+		x, _ := Atoi(c.x)
+		y, _ := Atoi(c.y)
+		z, _ := Atoi(c.z)
 
 		if !x.Add(y).IsEqualTo(z) {
 			t.Errorf("%s + %d != %s, got %s", x, y, z, x.Add(y))
@@ -86,9 +86,9 @@ func TestMul(t *testing.T) {
 	}
 
 	for _, c := range cases {
-		x, _ := NewFromString(c.x)
-		y, _ := NewFromString(c.y)
-		z, _ := NewFromString(c.z)
+		x, _ := Atoi(c.x)
+		y, _ := Atoi(c.y)
+		z, _ := Atoi(c.z)
 
 		if !x.Mul(y).IsEqualTo(z) {
 			t.Errorf("%s * %d != %s, got %s", x, y, z, x.Mul(y))
@@ -110,10 +110,10 @@ func TestDivMod(t *testing.T) {
 	}
 
 	for _, c := range cases {
-		x, _ := NewFromString(c.x)
-		y, _ := NewFromString(c.y)
-		q, _ := NewFromString(c.q)
-		m, _ := NewFromString(c.m)
+		x, _ := Atoi(c.x)
+		y, _ := Atoi(c.y)
+		q, _ := Atoi(c.q)
+		m, _ := Atoi(c.m)
 
 		if quo, mod := div(x, y); !quo.IsEqualTo(q) || !mod.IsEqualTo(m) {
 			t.Errorf("%s / %s != %s ... %s, got %s ... %s", x, y, q, m, quo, mod)

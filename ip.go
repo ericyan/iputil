@@ -86,7 +86,7 @@ func ParseDecimal(s string, af uint) net.IP {
 		return nil
 	}
 
-	x, err := uint128.NewFromString(s)
+	x, err := uint128.Atoi(s)
 	if err != nil {
 		return nil
 	}
