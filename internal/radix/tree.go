@@ -59,10 +59,11 @@ func (t *Tree) Get(key []byte) (interface{}, error) {
 	if len(key) == 0 {
 		return nil, ErrInvalidKey
 	}
+	bits := bitset(key)
 
 	cur := t.root
-	for i := 0; i < len(key); i++ {
-		child := cur.findChild(key[i])
+	for i := 0; i < bits.BitLen(); i++ {
+		child := cur.findChild(bits.Get(uint(i)))
 		if child == nil {
 			return nil, ErrNotFound
 		}
@@ -83,12 +84,13 @@ func (t *Tree) Set(key []byte, value interface{}) error {
 	if len(key) == 0 {
 		return ErrInvalidKey
 	}
+	bits := bitset(key)
 
 	cur := t.root
-	for i := 0; i < len(key); i++ {
-		child := cur.findChild(key[i])
+	for i := 0; i < bits.BitLen(); i++ {
+		child := cur.findChild(bits.Get(uint(i)))
 		if child == nil {
-			child = cur.newChild(key[i])
+			child = cur.newChild(bits.Get(uint(i)))
 		}
 
 		cur = child

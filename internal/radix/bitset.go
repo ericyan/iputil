@@ -40,6 +40,11 @@ func (s bitset) SetTo(i uint, bit uint8) {
 	}
 }
 
+// BitLen returns the number of bits held by the bitset.
+func (s bitset) BitLen() int {
+	return len(s) << 3
+}
+
 // String returns the binary representation of the bitset as a string.
 func (s bitset) String() string {
 	return fmt.Sprintf("%08b", s)
